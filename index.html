@@ -121,6 +121,37 @@ button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
   .mark.hit::after { width: 20px; height: 20px; font-size: 13px; top: -9px; right: -9px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; } .mark.hint { opacity: 1; } }
+/* Opening: a flashlight sweeps the dark room, hazard tape rolls in, the brief card rises */
+@property --sx { syntax: "<percentage>"; inherits: false; initial-value: -25%; }
+.sweep {
+  position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: radial-gradient(ellipse 22% 60% at var(--sx) 55%, rgba(245,197,24,.10) 0 30%, rgba(10,11,13,.94) 75%);
+  animation: sweep 1.7s cubic-bezier(.45,.05,.3,1) forwards, unveil .5s ease-out 1.6s forwards;
+}
+@keyframes sweep { from { --sx: -25%; } to { --sx: 125%; } }
+@keyframes unveil { to { opacity: 0; visibility: hidden; } }
+#startOv { z-index: 3; animation: dim-in .4s ease-out 1.4s both; }
+#startOv .card { animation: rise .6s cubic-bezier(.2,.9,.3,1.2) 1.55s both; position: relative; overflow: hidden; border-top: 0; padding-top: 30px; }
+#startOv .card::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px;
+  background: repeating-linear-gradient(-45deg, var(--signal) 0 14px, var(--bg) 14px 28px);
+  transform-origin: left; animation: tape .5s ease-out 1.9s both, crawl 1.2s linear 2.4s infinite;
+}
+#startOv .card h2 { animation: stamp .35s ease-out 2.1s both; }
+#startOv .card li { animation: slide .35s ease-out both; }
+#startOv .card li:nth-child(1) { animation-delay: 2.25s; }
+#startOv .card li:nth-child(2) { animation-delay: 2.35s; }
+#startOv .card li:nth-child(3) { animation-delay: 2.45s; }
+#startBtn { animation: slide .35s ease-out 2.6s both; }
+.brand h1 { animation: stamp .4s ease-out .2s both; }
+.stats { animation: slide .4s ease-out .4s both; }
+@keyframes dim-in { from { background: rgba(14,15,17,0); backdrop-filter: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(40px) scale(.96); } }
+@keyframes tape { from { transform: scaleX(0); } }
+@keyframes crawl { to { background-position: 39.6px 0; } }
+@keyframes stamp { 0% { opacity: 0; transform: scale(1.6); letter-spacing: .3em; } 70% { opacity: 1; transform: scale(.97); } 100% { transform: scale(1); } }
+@keyframes slide { from { opacity: 0; transform: translateX(-14px); } }
+@media (prefers-reduced-motion: reduce) { .sweep { display: none; } }
 </style>
 
 <div class="wrap">
@@ -138,6 +169,7 @@ button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
     <img id="room" src="oda1c.jpg" alt="Ofis odası: kitaplık, su sebili, acil çıkış kapısı, iki çalışma masası, mutfak tezgâhı" width="2576" height="1438">
     <div class="field" id="field" aria-label="Oyun alanı"></div>
     <div class="toast" id="toast" hidden></div>
+    <div class="sweep" aria-hidden="true"></div>
     <div class="overlay" id="startOv">
       <div class="card">
         <h2>Odadaki 5 riski bul</h2>
