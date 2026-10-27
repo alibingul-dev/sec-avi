@@ -159,6 +159,19 @@ button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
   .card h2 { font-size: 23px; }
   .score { font-size: 42px; }
 }
+/* Phone (portrait or landscape): compact bar, room fills the screen edge to edge */
+@media (max-width: 900px), (max-height: 600px) {
+  .wrap { gap: 8px; padding-block: 6px 24px; }
+  .bar { gap: 6px 14px; padding-bottom: 6px; border-bottom-width: 2px; }
+  .brand small { display: none; }
+  .brand h1 { font-size: 20px; }
+  .stats { gap: 12px; }
+  .stat b { font-size: 18px; }
+  .stat i { font-size: 9px; }
+  .bar button { font-size: 13px; padding: 6px 10px; }
+  .stage { margin-inline: -16px; max-width: calc(100% + 32px); border: 0; border-radius: 0; }
+  .stage img { max-height: calc(100svh - 52px); }
+}
 </style>
 
 <div class="wrap">
