@@ -152,6 +152,15 @@ button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
 @keyframes stamp { 0% { opacity: 0; transform: scale(1.6); letter-spacing: .3em; } 70% { opacity: 1; transform: scale(.97); } 100% { transform: scale(1); } }
 @keyframes slide { from { opacity: 0; transform: translateX(-14px); } }
 @media (prefers-reduced-motion: reduce) { .sweep { display: none; } }
+@media (max-width: 700px) {
+  .overlay { position: static; background: var(--bg) !important; backdrop-filter: none !important; padding: 12px 0 0; }
+  .stage { border: 0; background: transparent; overflow: visible; }
+  .stage img { border-radius: 6px; border: 1px solid var(--line); }
+  .card { max-width: none; padding: 16px; }
+  #startOv .card { padding-top: 26px; }
+  .card h2 { font-size: 23px; }
+  .score { font-size: 42px; }
+}
 </style>
 
 <div class="wrap">
