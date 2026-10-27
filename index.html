@@ -56,8 +56,8 @@ button.ghost { background: transparent; color: var(--fg); border: 1px solid var(
 button:disabled { opacity: .4; cursor: not-allowed; }
 button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
 
-.stage { position: relative; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); }
-.stage img { display: block; width: 100%; height: auto; max-width: 100%; user-select: none; -webkit-user-drag: none; }
+.stage { position: relative; width: fit-content; max-width: 100%; margin-inline: auto; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); }
+.stage img { display: block; width: auto; height: auto; max-width: 100%; max-height: calc(100svh - 120px); user-select: none; -webkit-user-drag: none; }
 .field { position: absolute; inset: 0 0 auto; aspect-ratio: 2576 / 1438; cursor: crosshair; }
 .mark { position: absolute; pointer-events: none; transform: translate(-50%, -50%); }
 .mark.hit {
@@ -83,11 +83,12 @@ button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
 @keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
 .overlay {
-  position: absolute; inset: 0; display: grid; place-items: center; padding: 16px;
+  position: fixed; inset: 0; z-index: 20; display: grid; overflow-y: auto;
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
   background: rgba(14,15,17,.78); backdrop-filter: blur(3px);
 }
 .card {
-  max-width: 460px; width: 100%; background: var(--panel); border: 1px solid var(--line);
+  margin: auto; max-width: 460px; width: 100%; background: var(--panel); border: 1px solid var(--line);
   border-top: 6px solid var(--signal); border-radius: 6px; padding: 20px 22px; display: grid; gap: 12px;
 }
 .card h2 { font-family: var(--display); font-weight: 800; font-size: 28px; margin: 0; text-transform: uppercase; text-wrap: balance; }
@@ -130,7 +131,7 @@ button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
 }
 @keyframes sweep { from { --sx: -25%; } to { --sx: 125%; } }
 @keyframes unveil { to { opacity: 0; visibility: hidden; } }
-#startOv { z-index: 3; animation: dim-in .4s ease-out 1.4s both; }
+#startOv { animation: dim-in .4s ease-out 1.4s both; }
 #startOv .card { animation: rise .6s cubic-bezier(.2,.9,.3,1.2) 1.55s both; position: relative; overflow: hidden; border-top: 0; padding-top: 30px; }
 #startOv .card::before {
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px;
@@ -153,10 +154,7 @@ button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
 @keyframes slide { from { opacity: 0; transform: translateX(-14px); } }
 @media (prefers-reduced-motion: reduce) { .sweep { display: none; } }
 @media (max-width: 700px) {
-  .overlay { position: relative; z-index: 3; background: var(--bg) !important; backdrop-filter: none !important; padding: 12px 0 0; }
-  .stage { border: 0; background: transparent; overflow: visible; }
-  .stage img { border-radius: 6px; border: 1px solid var(--line); }
-  .card { max-width: none; padding: 16px; }
+  .card { padding: 16px; }
   #startOv .card { padding-top: 26px; }
   .card h2 { font-size: 23px; }
   .score { font-size: 42px; }
