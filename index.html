@@ -56,6 +56,13 @@ button.ghost { background: transparent; color: var(--fg); border: 1px solid var(
 button:disabled { opacity: .4; cursor: not-allowed; }
 button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
 
+.info {
+  width: 34px; height: 34px; padding: 0; border-radius: 50%;
+  background: transparent; color: var(--signal); border: 2px solid var(--signal);
+  font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 700; font-size: 19px; line-height: 1;
+  text-transform: none; letter-spacing: 0; display: grid; place-items: center;
+}
+.info:hover { background: var(--signal); color: var(--bg); }
 .stage { position: relative; width: fit-content; max-width: 100%; margin-inline: auto; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); }
 .stage img { display: block; width: auto; height: auto; max-width: 100%; max-height: calc(100svh - 120px); user-select: none; -webkit-user-drag: none; }
 .field { position: absolute; inset: 0 0 auto; aspect-ratio: 2576 / 1438; cursor: crosshair; }
@@ -184,6 +191,7 @@ button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
       <div class="stat"><b id="found">0/5</b><i>risk</i></div>
       <div class="stat"><b id="misses">0</b><i>hatalı tık</i></div>
       <button class="ghost" id="hintBtn" disabled>İpucu −10 sn</button>
+      <button class="info" id="infoBtn" aria-label="Oyun hakkında bilgi" title="Bilgi">i</button>
     </div>
   </div>
 
@@ -202,6 +210,20 @@ button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
           <li>İpucu 10 saniye götürür.</li>
         </ul>
         <div class="actions"><button id="startBtn">Başla</button></div>
+      </div>
+    </div>
+    <div class="overlay" id="infoOv" hidden>
+      <div class="card">
+        <h2>SEÇ Avı nedir?</h2>
+        <p>SEÇ, sağlık, emniyet ve çevre demek. Bu oyun her gün yanından geçtiğin riskleri fark etmeyi alıştırır: her oda gerçek bir çalışma ortamı, içinde saklı riskler var.</p>
+        <ul>
+          <li>Riski gördüğün yere tıkla. Bulunan risk yeşil çemberle işaretlenir.</li>
+          <li>Süre 60 saniye. Boş yere tıklamak 5, ipucu 10 saniye götürür.</li>
+          <li>Puan: bulunan her risk 100, hepsini bulursan kalan her saniye 10, her hatalı tık −20.</li>
+          <li>Oyun bitince denetim listesinde her riskin nedeni ve doğrusu açılır.</li>
+        </ul>
+        <p>Bilgi penceresi açıkken süre durur.</p>
+        <div class="actions"><button id="infoClose">Kapat</button></div>
       </div>
     </div>
     <div class="overlay" id="endOv" hidden>
@@ -342,7 +364,8 @@ button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
     clearInterval(tick);
     tick = setInterval(() => {
       const now = performance.now();
-      state.time -= (now - last) / 1000; last = now;
+      if (!state.paused) state.time -= (now - last) / 1000;
+      last = now;
       if (state.time <= 0) { state.time = 0; finish(false); }
       render();
     }, 200);
@@ -376,6 +399,8 @@ button:focus-visible { outline: 3px solid var(--fg); outline-offset: 2px; }
     render();
   }
 
+  $("infoBtn").addEventListener("click", () => { state.paused = true; $("infoOv").hidden = false; $("infoClose").focus(); });
+  $("infoClose").addEventListener("click", () => { state.paused = false; $("infoOv").hidden = true; });
   $("startBtn").addEventListener("click", start);
   $("againBtn").addEventListener("click", start);
   $("reviewBtn").addEventListener("click", () => { $("endOv").hidden = true; });
